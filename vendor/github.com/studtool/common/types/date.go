@@ -10,8 +10,8 @@ const (
 
 type Date time.Time
 
-func (t *Date) MarshalJSON() ([]byte, error) {
-	return []byte(time.Time(*t).Format(DateLayout)), nil
+func (t Date) MarshalJSON() ([]byte, error) {
+	return []byte(time.Time(t).Format(DateLayout)), nil
 }
 
 func (t *Date) UnmarshalJSON(b []byte) error {
