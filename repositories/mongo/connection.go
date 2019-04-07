@@ -35,7 +35,7 @@ func (conn *Connection) Open() error {
 		return err
 	}
 
-	err = client.Connect(conn.timeoutContext(ConnectTimeout))
+	err = client.Connect(conn.tdContext(ConnectTimeout))
 	if err != nil {
 		return err
 	}
@@ -45,10 +45,15 @@ func (conn *Connection) Open() error {
 }
 
 func (conn *Connection) Close() error {
-	return conn.client.Disconnect(conn.timeoutContext(DisconnectTimeout))
+	return conn.client.Disconnect(conn.tdContext(DisconnectTimeout))
 }
 
-func (conn *Connection) timeoutContext(t time.Duration) context.Context {
+func (conn *Connection) tdContext(t time.Duration) context.Context {
 	ctx, _ := context.WithTimeout(context.TODO(), t)
+	return ctx
+}
+
+func (conn *Connection) bgContext(t time.Duration) context.Context {
+	ctx, _ := context.WithTimeout(context.Background(), t)
 	return ctx
 }

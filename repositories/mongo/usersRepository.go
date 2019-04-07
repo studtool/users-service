@@ -32,9 +32,9 @@ func NewUsersRepository(conn *Connection) *UsersRepository {
 }
 
 func (r *UsersRepository) AddUserById(userId string) *errs.Error {
-	ctx := r.connection.timeoutContext(InsertTimeout)
+	ctx := r.connection.bgContext(InsertTimeout)
 	_, err := r.collection.InsertOne(ctx, bson.M{
-		"userId":   userId,
+		"_id":      userId,
 		"username": fmt.Sprintf("user%s", userId),
 	})
 	if err != nil {
@@ -44,7 +44,7 @@ func (r *UsersRepository) AddUserById(userId string) *errs.Error {
 }
 
 func (r *UsersRepository) FindUserInfoByUsername(u *models.UserInfo) *errs.Error {
-	ctx := r.connection.timeoutContext(SelectTimeout)
+	ctx := r.connection.tdContext(SelectTimeout)
 	res := r.collection.FindOne(ctx, bson.M{
 		"username": u.Username,
 	})
@@ -76,18 +76,21 @@ func (r *UsersRepository) FindUserInfoByUsername(u *models.UserInfo) *errs.Error
 }
 
 func (r *UsersRepository) GetUser(userId string) (*models.UserMap, *errs.Error) {
-	ctx := r.connection.timeoutContext(SelectTimeout)
+	ctx := r.connection.tdContext(SelectTimeout)
 	res := r.collection.FindOne(ctx, bson.M{
-		"userId": userId,
+		"_id": userId,
 	})
 	if err := res.Err(); err != nil {
-		panic(err) //TODO parse err
+		return nil, r.wrapErr(err)
 	}
 
 	m := &bson.M{}
 	if err := res.Decode(&m); err != nil {
-		return nil, r.wrapErr(err) //TODO check empty?
+		return nil, r.parseErr(err)
 	}
+
+	(*m)["userId"] = (*m)["_id"]
+	delete(*m, "_id")
 
 	return (*models.UserMap)(m), nil
 }
@@ -97,9 +100,9 @@ func (r *UsersRepository) UpdateUser(u *models.User) *errs.Error {
 }
 
 func (r *UsersRepository) DeleteUserById(userId string) *errs.Error {
-	ctx := r.connection.timeoutContext(DeleteTimeout)
+	ctx := r.connection.tdContext(DeleteTimeout)
 	_, err := r.collection.DeleteOne(ctx, bson.M{
-		"userId": userId,
+		"_id": userId,
 	})
 	if err != nil {
 		return r.wrapErr(err)
@@ -107,6 +110,13 @@ func (r *UsersRepository) DeleteUserById(userId string) *errs.Error {
 	return nil
 }
 
-func (r *UsersRepository) wrapErr(err error) *errs.Error {
+func (r *UsersRepository) parseErr(err error) *errs.Error {
+	if err.Error() == "mongo: no documents in result" {
+		return errs.NewNotFoundError("user not found")
+	}
 	return r.wrapErr(err)
+}
+
+func (r *UsersRepository) wrapErr(err error) *errs.Error {
+	return errs.NewInternalError(err.Error())
 }

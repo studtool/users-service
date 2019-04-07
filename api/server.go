@@ -2,6 +2,7 @@ package api
 
 import (
 	"fmt"
+	"github.com/studtool/users-service/repositories"
 	"net/http"
 
 	"github.com/gorilla/handlers"
@@ -15,10 +16,11 @@ import (
 )
 
 type Server struct {
-	server *rest.Server
+	server          *rest.Server
+	usersRepository repositories.UsersRepository
 }
 
-func NewServer() *Server {
+func NewServer(r repositories.UsersRepository) *Server {
 	srv := &Server{
 		server: rest.NewServer(
 			rest.ServerConfig{
@@ -26,6 +28,7 @@ func NewServer() *Server {
 				Port: config.ServerPort.Value(),
 			},
 		),
+		usersRepository: r,
 	}
 
 	mx := mux.NewRouter()
