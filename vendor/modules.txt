@@ -11,11 +11,12 @@ github.com/mailru/easyjson/jwriter
 github.com/mailru/easyjson/buffer
 # github.com/sirupsen/logrus v1.4.1
 github.com/sirupsen/logrus
-# github.com/studtool/common v0.0.0-20190406204519-a197e7fd43a3
+# github.com/studtool/common v0.0.0-20190407144957-10f5096c0396
 github.com/studtool/common/consts
 github.com/studtool/common/rest
 github.com/studtool/common/logs
 github.com/studtool/common/config
+github.com/studtool/common/types
 github.com/studtool/common/errs
 # go.uber.org/dig v1.7.1-0.20190327003609-4cc9f8898fe3
 go.uber.org/dig
