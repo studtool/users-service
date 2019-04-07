@@ -9,7 +9,7 @@ import (
 type UsersRepository interface {
 	AddUserById(userId string) *errs.Error
 	FindUserInfoByUsername(u *models.UserInfo) *errs.Error
-	GetUser(u *models.User) *errs.Error
+	GetUser(userId string) (*models.UserMap, *errs.Error)
 	UpdateUser(u *models.User) *errs.Error
 	DeleteUserById(userId string) *errs.Error
 }

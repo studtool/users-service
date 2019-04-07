@@ -17,6 +17,9 @@ type User struct {
 }
 
 //easyjson:json
+type UserMap map[string]interface{}
+
+//easyjson:json
 type UserInfo struct {
 	Id       string `json:"userId"`
 	Username string `json:"username"`
