@@ -2,7 +2,6 @@ package api
 
 import (
 	"fmt"
-	"github.com/studtool/users-service/repositories"
 	"net/http"
 
 	"github.com/gorilla/handlers"
@@ -13,6 +12,7 @@ import (
 
 	"github.com/studtool/users-service/beans"
 	"github.com/studtool/users-service/config"
+	"github.com/studtool/users-service/repositories"
 )
 
 type Server struct {
