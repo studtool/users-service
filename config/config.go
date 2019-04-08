@@ -4,6 +4,10 @@ import (
 	"github.com/studtool/common/config"
 )
 
+const (
+	ServiceName = "auth-service"
+)
+
 var (
 	ServerPort = config.NewStringDefault("STUDTOOL_USERS_SERVICE_PORT", "80")
 

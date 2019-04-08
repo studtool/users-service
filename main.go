@@ -1,11 +1,13 @@
 package main
 
 import (
-	"fmt"
 	"os"
 	"os/signal"
 
 	"go.uber.org/dig"
+
+	"github.com/studtool/common/logs"
+	"github.com/studtool/common/utils"
 
 	"github.com/studtool/users-service/api"
 	"github.com/studtool/users-service/beans"
@@ -17,53 +19,66 @@ import (
 func main() {
 	c := dig.New()
 
-	panicOnErr(c.Provide(mongo.NewConnection))
-	panicOnErr(c.Provide(
-		mongo.NewUsersRepository,
-		dig.As(new(repositories.UsersRepository)),
-	))
-	panicOnErr(c.Provide(api.NewServer))
-
 	if config.RepositoriesEnabled.Value() {
+		panicOnErr(c.Provide(mongo.NewConnection))
+		panicOnErr(c.Provide(
+			mongo.NewUsersRepository,
+			dig.As(new(repositories.UsersRepository)),
+		))
+
 		panicOnErr(c.Invoke(func(conn *mongo.Connection) {
+			lf := &logs.LogFields{
+				Component: conn.GetComponent(),
+				Function:  utils.NameOf(conn.Open),
+			}
+
 			if err := conn.Open(); err != nil {
-				beans.Logger.Fatal(err)
+				beans.Logger.Fatal(lf, err.Error())
 			} else {
-				beans.Logger.Info("storage: connection open")
+				beans.Logger.Info(lf, "connection open")
 			}
 		}))
 		defer func() {
 			panicOnErr(c.Invoke(func(conn *mongo.Connection) {
+				lf := &logs.LogFields{
+					Component: conn.GetComponent(),
+					Function:  utils.NameOf(conn.Close),
+				}
+
 				if err := conn.Close(); err != nil {
-					beans.Logger.Fatal(err)
+					beans.Logger.Fatal(lf, err)
 				} else {
-					beans.Logger.Info("storage: connection closed")
+					beans.Logger.Info(lf, "connection closed")
 				}
 			}))
 		}()
+	} else {
+		panicOnErr(c.Provide(
+			func() repositories.UsersRepository {
+				return nil
+			},
+		))
 	}
 
 	ch := make(chan os.Signal)
 	signal.Notify(ch, os.Interrupt)
 
-	_ = c.Invoke(func(srv *api.Server) {
+	panicOnErr(c.Provide(api.NewServer))
+
+	panicOnErr(c.Invoke(func(srv *api.Server) {
 		go func() {
 			if err := srv.Run(); err != nil {
-				beans.Logger.Fatal(err)
+				beans.Logger.Fatal(srv.LogFieldsFor(srv.Run), err)
 				ch <- os.Interrupt
 			}
 		}()
-
-		beans.Logger.Info(fmt.Sprintf("server: started; [port: %s]", config.ServerPort.Value()))
-	})
+	}))
 	defer func() {
-		_ = c.Invoke(func(srv *api.Server) {
+		panicOnErr(c.Invoke(func(srv *api.Server) {
 			if err := srv.Shutdown(); err != nil {
-				beans.Logger.Fatal(err)
-			} else {
-				beans.Logger.Info("server: down")
+				beans.Logger.Fatal(srv.LogFieldsFor(srv.Shutdown), err)
 			}
-		})
+		}))
 	}()
 
 	<-ch

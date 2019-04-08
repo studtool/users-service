@@ -31,6 +31,10 @@ func NewError(t int, message string) *Error {
 	return err
 }
 
+func New(err error) *Error {
+	return NewError(Internal, err.Error())
+}
+
 func NewInternalError(message string) *Error {
 	return NewError(Internal, message)
 }

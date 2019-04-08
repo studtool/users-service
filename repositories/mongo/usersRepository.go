@@ -120,3 +120,7 @@ func (r *UsersRepository) parseErr(err error) *errs.Error {
 func (r *UsersRepository) wrapErr(err error) *errs.Error {
 	return errs.NewInternalError(err.Error())
 }
+
+func (r *UsersRepository) GetComponent() string {
+	return Component
+}

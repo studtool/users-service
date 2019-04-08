@@ -3,6 +3,7 @@ package rest
 import (
 	"context"
 	"fmt"
+	"github.com/studtool/common/utils"
 	"net/http"
 
 	"github.com/studtool/common/logs"
@@ -35,9 +36,23 @@ func (srv *Server) SetLogger(log *logs.Logger) {
 }
 
 func (srv *Server) Run() error {
+	srv.logger.Info(&logs.LogFields{
+		Component: srv.GetComponent(),
+		Function:  utils.NameOf(srv.Run),
+	}, fmt.Sprintf("started [%s]", srv.server.Addr))
+
 	return srv.server.ListenAndServe()
 }
 
 func (srv *Server) Shutdown() error {
+	srv.logger.Info(&logs.LogFields{
+		Component: srv.GetComponent(),
+		Function:  utils.NameOf(srv.Shutdown),
+	}, "shutdown")
+
 	return srv.server.Shutdown(context.TODO())
+}
+
+func (srv *Server) GetComponent() string {
+	return "server"
 }

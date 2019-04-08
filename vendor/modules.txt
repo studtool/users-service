@@ -15,10 +15,11 @@ github.com/mailru/easyjson/jwriter
 github.com/mailru/easyjson/buffer
 # github.com/sirupsen/logrus v1.4.1
 github.com/sirupsen/logrus
-# github.com/studtool/common v0.0.0-20190407164119-2eddb91b5be4
+# github.com/studtool/common v0.0.0-20190408205534-a07adbe6bcf3
+github.com/studtool/common/logs
+github.com/studtool/common/utils
 github.com/studtool/common/consts
 github.com/studtool/common/rest
-github.com/studtool/common/logs
 github.com/studtool/common/config
 github.com/studtool/common/types
 github.com/studtool/common/errs
