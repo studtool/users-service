@@ -6,9 +6,6 @@ import (
 
 	"go.uber.org/dig"
 
-	"github.com/studtool/common/logs"
-	"github.com/studtool/common/utils"
-
 	"github.com/studtool/users-service/api"
 	"github.com/studtool/users-service/beans"
 	"github.com/studtool/users-service/config"
@@ -27,28 +24,18 @@ func main() {
 		))
 
 		panicOnErr(c.Invoke(func(conn *mongo.Connection) {
-			lf := &logs.LogFields{
-				Component: conn.GetComponent(),
-				Function:  utils.NameOf(conn.Open),
-			}
-
 			if err := conn.Open(); err != nil {
-				beans.Logger.Fatal(lf, err.Error())
+				beans.Logger.Fatal(err.Error())
 			} else {
-				beans.Logger.Info(lf, "connection open")
+				beans.Logger.Info("connection open")
 			}
 		}))
 		defer func() {
 			panicOnErr(c.Invoke(func(conn *mongo.Connection) {
-				lf := &logs.LogFields{
-					Component: conn.GetComponent(),
-					Function:  utils.NameOf(conn.Close),
-				}
-
 				if err := conn.Close(); err != nil {
-					beans.Logger.Fatal(lf, err)
+					beans.Logger.Fatal(err)
 				} else {
-					beans.Logger.Info(lf, "connection closed")
+					beans.Logger.Info("connection closed")
 				}
 			}))
 		}()
@@ -68,7 +55,7 @@ func main() {
 	panicOnErr(c.Invoke(func(srv *api.Server) {
 		go func() {
 			if err := srv.Run(); err != nil {
-				beans.Logger.Fatal(srv.LogFieldsFor(srv.Run), err)
+				beans.Logger.Fatal(err)
 				ch <- os.Interrupt
 			}
 		}()
@@ -76,7 +63,7 @@ func main() {
 	defer func() {
 		panicOnErr(c.Invoke(func(srv *api.Server) {
 			if err := srv.Shutdown(); err != nil {
-				beans.Logger.Fatal(srv.LogFieldsFor(srv.Shutdown), err)
+				beans.Logger.Fatal(err)
 			}
 		}))
 	}()

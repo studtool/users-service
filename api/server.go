@@ -2,7 +2,6 @@ package api
 
 import (
 	"fmt"
-	"github.com/studtool/users-service/components"
 	"net/http"
 
 	"github.com/gorilla/handlers"
@@ -16,15 +15,9 @@ import (
 	"github.com/studtool/users-service/repositories"
 )
 
-const (
-	Component = "server"
-)
-
 type Server struct {
 	server          *rest.Server
 	usersRepository repositories.UsersRepository
-
-	components.Component
 }
 
 func NewServer(r repositories.UsersRepository) *Server {
@@ -36,7 +29,6 @@ func NewServer(r repositories.UsersRepository) *Server {
 			},
 		),
 		usersRepository: r,
-		Component:       *components.NewComponent(Component),
 	}
 
 	mx := mux.NewRouter()

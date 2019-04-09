@@ -12,8 +12,6 @@ import (
 )
 
 const (
-	Component = "storage"
-
 	ConnectTimeout    = 5 * time.Second
 	DisconnectTimeout = 5 * time.Second
 )
@@ -58,8 +56,4 @@ func (conn *Connection) tdContext(t time.Duration) context.Context {
 func (conn *Connection) bgContext(t time.Duration) context.Context {
 	ctx, _ := context.WithTimeout(context.Background(), t)
 	return ctx
-}
-
-func (conn *Connection) GetComponent() string {
-	return Component
 }

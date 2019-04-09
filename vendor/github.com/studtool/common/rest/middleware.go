@@ -2,8 +2,6 @@ package rest
 
 import (
 	"fmt"
-	"github.com/studtool/common/logs"
-	"github.com/studtool/common/utils"
 	"net/http"
 )
 
@@ -12,10 +10,7 @@ func (srv *Server) WithRecover(h http.Handler) http.Handler {
 		func(w http.ResponseWriter, r *http.Request) {
 			defer func() {
 				if r := recover(); r != nil {
-					srv.logger.Error(&logs.LogFields{
-						Component: srv.GetComponent(),
-						Function:  utils.NameOf(srv.WithRecover),
-					}, fmt.Sprintf("panic: %v", r))
+					srv.logger.Error(fmt.Sprintf("panic: %v", r))
 
 					w.WriteHeader(http.StatusInternalServerError)
 				}

@@ -3,8 +3,6 @@ package rest
 import (
 	"fmt"
 	"github.com/mailru/easyjson"
-	"github.com/studtool/common/logs"
-	"github.com/studtool/common/utils"
 	"io/ioutil"
 	"net/http"
 
@@ -61,10 +59,7 @@ func (srv *Server) WriteOk(w http.ResponseWriter) {
 
 func (srv *Server) WriteErrJSON(w http.ResponseWriter, err *errs.Error) {
 	if err.Type == errs.Internal {
-		srv.logger.Error(&logs.LogFields{
-			Component: srv.GetComponent(),
-			Function:  utils.NameOf(srv.WriteErrJSON),
-		}, err.Message)
+		srv.logger.Error(err.Message)
 
 		w.WriteHeader(http.StatusInternalServerError)
 		return

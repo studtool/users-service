@@ -25,8 +25,8 @@ github.com/stretchr/objx v0.1.1/go.mod h1:HFkY916IF+rwdDfMAkV7OtwuqBVzrE8GR6GFx+
 github.com/stretchr/testify v1.2.2/go.mod h1:a8OnRcib4nhh0OaRAV+Yts87kKdq0PP7pXfy6kDkUVs=
 github.com/stretchr/testify v1.3.0 h1:TivCn/peBQ7UY8ooIcPgZFpTNSz0Q2U6UrFlUfqbe0Q=
 github.com/stretchr/testify v1.3.0/go.mod h1:M5WIy9Dh21IEIfnGCwXGc5bZfKNJtfHm1UVUgZn+9EI=
-github.com/studtool/common v0.0.0-20190408205534-a07adbe6bcf3 h1:4o99UVw0E8l/2K/VhFGfrkN9ibjNRxdzeUz/rlQi2Zc=
-github.com/studtool/common v0.0.0-20190408205534-a07adbe6bcf3/go.mod h1:bq24shZBDIjJFH2PvuLuQaaXWP2Osawgw44qxrXglpg=
+github.com/studtool/common v0.0.0-20190409083043-4c95a6d72888 h1:O1rqRkBP1Q9D3sgmeRW1m/YvsjYo7CJJtQp2NreIsQc=
+github.com/studtool/common v0.0.0-20190409083043-4c95a6d72888/go.mod h1:bq24shZBDIjJFH2PvuLuQaaXWP2Osawgw44qxrXglpg=
 github.com/tidwall/pretty v0.0.0-20190325153808-1166b9ac2b65 h1:rQ229MBgvW68s1/g6f1/63TgYwYxfF4E+bi/KC19P8g=
 github.com/tidwall/pretty v0.0.0-20190325153808-1166b9ac2b65/go.mod h1:XNkn88O1ChpSDQmQeStsy+sBenx6DDtFZJxhVysOjyk=
 github.com/xdg/scram v0.0.0-20180814205039-7eeb5667e42c h1:u40Z8hqBAAQyv+vATcGgV0YCnDjqSL7/q/JyPhhJSPk=
