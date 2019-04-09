@@ -18,11 +18,6 @@ func main() {
 
 	if config.RepositoriesEnabled.Value() {
 		panicOnErr(c.Provide(mongo.NewConnection))
-		panicOnErr(c.Provide(
-			mongo.NewUsersRepository,
-			dig.As(new(repositories.UsersRepository)),
-		))
-
 		panicOnErr(c.Invoke(func(conn *mongo.Connection) {
 			if err := conn.Open(); err != nil {
 				beans.Logger.Fatal(err.Error())
@@ -39,6 +34,11 @@ func main() {
 				}
 			}))
 		}()
+
+		panicOnErr(c.Provide(
+			mongo.NewUsersRepository,
+			dig.As(new(repositories.UsersRepository)),
+		))
 	} else {
 		panicOnErr(c.Provide(
 			func() repositories.UsersRepository {

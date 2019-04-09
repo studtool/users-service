@@ -32,6 +32,7 @@ type UsersRepository struct {
 func NewUsersRepository(conn *Connection) *UsersRepository {
 	db := conn.client.Database(config.StorageDB.Value())
 	return &UsersRepository{
+		connection: conn,
 		collection: db.Collection("users"),
 	}
 }
@@ -59,7 +60,7 @@ func (r *UsersRepository) FindUserInfoByUsername(u *models.UserInfo) *errs.Error
 
 	var m bson.M
 	if err := res.Decode(&m); err != nil {
-		return r.wrapErr(err) //TODO check empty?
+		return r.parseErr(err)
 	}
 
 	userId, ok := m["userId"]

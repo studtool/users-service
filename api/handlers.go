@@ -6,10 +6,15 @@ import (
 )
 
 func (srv *Server) findProfile(w http.ResponseWriter, r *http.Request) {
-	user := &models.UserInfo{
-		Username: srv.parseUsername(r),
+	username, err := srv.parseUsername(r)
+	if err != nil {
+		srv.server.WriteErrJSON(w, err)
+		return
 	}
 
+	user := &models.UserInfo{
+		Username: username,
+	}
 	if err := srv.usersRepository.FindUserInfoByUsername(user); err != nil {
 		srv.server.WriteErrJSON(w, err)
 		return
