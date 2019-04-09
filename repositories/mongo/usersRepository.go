@@ -2,6 +2,7 @@ package mongo
 
 import (
 	"fmt"
+	"log"
 	"time"
 
 	"go.mongodb.org/mongo-driver/bson"
@@ -19,6 +20,10 @@ const (
 	DeleteTimeout = time.Second
 )
 
+const (
+	idField = "_id"
+)
+
 type UsersRepository struct {
 	connection *Connection
 	collection *mongo.Collection
@@ -34,7 +39,7 @@ func NewUsersRepository(conn *Connection) *UsersRepository {
 func (r *UsersRepository) AddUserById(userId string) *errs.Error {
 	ctx := r.connection.bgContext(InsertTimeout)
 	_, err := r.collection.InsertOne(ctx, bson.M{
-		"_id":      userId,
+		idField:    userId,
 		"username": fmt.Sprintf("user%s", userId),
 	})
 	if err != nil {
@@ -78,7 +83,7 @@ func (r *UsersRepository) FindUserInfoByUsername(u *models.UserInfo) *errs.Error
 func (r *UsersRepository) GetUser(userId string) (*models.UserMap, *errs.Error) {
 	ctx := r.connection.tdContext(SelectTimeout)
 	res := r.collection.FindOne(ctx, bson.M{
-		"_id": userId,
+		idField: userId,
 	})
 	if err := res.Err(); err != nil {
 		return nil, r.wrapErr(err)
@@ -89,14 +94,28 @@ func (r *UsersRepository) GetUser(userId string) (*models.UserMap, *errs.Error) 
 		return nil, r.parseErr(err)
 	}
 
-	(*m)["userId"] = (*m)["_id"]
-	delete(*m, "_id")
+	(*m)["userId"] = (*m)[idField]
+	delete(*m, idField)
 
 	return (*models.UserMap)(m), nil
 }
 
 func (r *UsersRepository) UpdateUser(u *models.User) *errs.Error {
-	panic("implement me") //TODO
+	ctx := r.connection.tdContext(SelectTimeout)
+	res, err := r.collection.UpdateOne(ctx, bson.M{
+		"_id": u.Id,
+	}, bson.M{
+		"username":    u.Username,
+		"dateOfBirth": u.DateOfBirth,
+		"fullName":    u.FullName,
+		"location":    u.Location,
+		"university":  u.University,
+	})
+	if err != nil {
+		return r.wrapErr(err) //TODO check err
+	}
+	log.Println(res) //TODO check result
+	return nil
 }
 
 func (r *UsersRepository) DeleteUserById(userId string) *errs.Error {
