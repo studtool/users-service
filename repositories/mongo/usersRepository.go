@@ -56,7 +56,7 @@ func (r *UsersRepository) FindUserInfoByUsername(u *models.UserInfo) *errs.Error
 		"username": u.Username,
 	})
 	if err := res.Err(); err != nil {
-		panic(err) //TODO parse err
+		return r.wrapErr(err)
 	}
 
 	var m bson.M
