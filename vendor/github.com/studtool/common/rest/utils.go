@@ -81,6 +81,9 @@ func (srv *Server) WriteErrJSON(w http.ResponseWriter, err *errs.Error) {
 	case errs.NotAuthorized:
 		srv.WriteErrBodyJSON(w, http.StatusUnauthorized, err)
 
+	case errs.PermissionDenied:
+		srv.WriteErrBodyJSON(w, http.StatusForbidden, err)
+
 	default:
 		panic(fmt.Sprintf("no status code for error. Type: %d, Message: %s", err.Type, err.Message))
 	}

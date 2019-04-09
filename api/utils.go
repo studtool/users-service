@@ -26,3 +26,10 @@ func (srv *Server) parseUsername(r *http.Request) (string, *errs.Error) {
 func (srv *Server) parseUserId(r *http.Request) string {
 	return mux.Vars(r)[userIdVar]
 }
+
+func (srv *Server) checkAuthPermission(r *http.Request) *errs.Error {
+	if srv.server.ParseUserId(r) == srv.parseUserId(r) {
+		return nil
+	}
+	return errs.NewPermissionDeniedError("access denied") //TODO save err
+}

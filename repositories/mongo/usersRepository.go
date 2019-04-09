@@ -1,8 +1,9 @@
 package mongo
 
 import (
+	"context"
 	"fmt"
-	"log"
+	"github.com/studtool/structs"
 	"time"
 
 	"go.mongodb.org/mongo-driver/bson"
@@ -15,9 +16,8 @@ import (
 )
 
 const (
-	InsertTimeout = time.Second
 	SelectTimeout = time.Second
-	DeleteTimeout = time.Second
+	UpdateTimeout = 2 * time.Second
 )
 
 const (
@@ -25,21 +25,22 @@ const (
 )
 
 type UsersRepository struct {
-	connection *Connection
-	collection *mongo.Collection
+	connection  *Connection
+	collection  *mongo.Collection
+	notFoundErr *errs.Error
 }
 
 func NewUsersRepository(conn *Connection) *UsersRepository {
 	db := conn.client.Database(config.StorageDB.Value())
 	return &UsersRepository{
-		connection: conn,
-		collection: db.Collection("users"),
+		connection:  conn,
+		collection:  db.Collection("users"),
+		notFoundErr: errs.NewNotFoundError("profile not found"),
 	}
 }
 
 func (r *UsersRepository) AddUserById(userId string) *errs.Error {
-	ctx := r.connection.bgContext(InsertTimeout)
-	_, err := r.collection.InsertOne(ctx, bson.M{
+	_, err := r.collection.InsertOne(context.TODO(), bson.M{
 		idField:    userId,
 		"username": fmt.Sprintf("user%s", userId),
 	})
@@ -102,26 +103,24 @@ func (r *UsersRepository) GetUser(userId string) (*models.UserMap, *errs.Error) 
 }
 
 func (r *UsersRepository) UpdateUser(u *models.User) *errs.Error {
-	ctx := r.connection.tdContext(SelectTimeout)
+	m := structs.Map(u)
+
+	ctx := r.connection.tdContext(UpdateTimeout)
 	res, err := r.collection.UpdateOne(ctx, bson.M{
 		"_id": u.Id,
-	}, bson.M{
-		"username":    u.Username,
-		"dateOfBirth": u.DateOfBirth,
-		"fullName":    u.FullName,
-		"location":    u.Location,
-		"university":  u.University,
-	})
+	}, bson.D{{"$set", bson.M(m)}})
 	if err != nil {
-		return r.wrapErr(err) //TODO check err
+		return r.wrapErr(err)
 	}
-	log.Println(res) //TODO check result
+	if res.MatchedCount != 1 {
+		return r.notFoundErr
+	}
+
 	return nil
 }
 
 func (r *UsersRepository) DeleteUserById(userId string) *errs.Error {
-	ctx := r.connection.tdContext(DeleteTimeout)
-	_, err := r.collection.DeleteOne(ctx, bson.M{
+	_, err := r.collection.DeleteOne(context.TODO(), bson.M{
 		"_id": userId,
 	})
 	if err != nil {
@@ -132,7 +131,7 @@ func (r *UsersRepository) DeleteUserById(userId string) *errs.Error {
 
 func (r *UsersRepository) parseErr(err error) *errs.Error {
 	if err.Error() == "mongo: no documents in result" {
-		return errs.NewNotFoundError("user not found")
+		return r.notFoundErr
 	}
 	return r.wrapErr(err)
 }

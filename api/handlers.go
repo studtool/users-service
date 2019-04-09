@@ -36,7 +36,11 @@ func (srv *Server) getProfile(w http.ResponseWriter, r *http.Request) {
 }
 
 func (srv *Server) updateProfile(w http.ResponseWriter, r *http.Request) {
-	userId := srv.parseUserId(r) //TODO check authorized = user
+	userId := srv.parseUserId(r)
+	if err := srv.checkAuthPermission(r); err != nil {
+		srv.server.WriteErrJSON(w, err)
+		return
+	}
 
 	user := &models.User{}
 	if err := srv.server.ParseBodyJSON(user, r); err != nil {

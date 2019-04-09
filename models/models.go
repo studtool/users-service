@@ -8,12 +8,12 @@ import (
 
 //easyjson:json
 type User struct {
-	Id          string          `json:"userId"`
-	Username    string          `json:"username"`
-	FullName    *string         `json:"fullName"`
-	DateOfBirth *types.Date     `json:"dateOfBirth"`
-	Location    *LocationInfo   `json:"locationInfo"`
-	University  *UniversityInfo `json:"universityInfo"`
+	Id          string          `json:"userId" structs:"-"`
+	Username    string          `json:"username" structs:"username"`
+	FullName    *string         `json:"fullName" structs:"fullName"`
+	DateOfBirth *types.Date     `json:"dateOfBirth" structs:"dateOfBirth"`
+	Location    *LocationInfo   `json:"locationInfo" structs:"location"`
+	University  *UniversityInfo `json:"universityInfo" structs:"university"`
 }
 
 //easyjson:json
@@ -27,15 +27,15 @@ type UserInfo struct {
 
 //easyjson:json
 type LocationInfo struct {
-	Country string  `json:"country"`
-	City    *string `json:"city"`
+	Country string  `json:"country" structs:"country"`
+	City    *string `json:"city" structs:"city"`
 }
 
 //easyjson:json
 type UniversityInfo struct {
-	Name           string  `json:"name"`
-	Department     *string `json:"department"`
-	Speciality     *string `json:"speciality"`
-	AdmissionYear  *int    `json:"admissionYear"`
-	GraduationYear *int    `json:"graduationYear"`
+	Name           string  `json:"name" structs:"name"`
+	Department     *string `json:"department" structs:"department"`
+	Speciality     *string `json:"speciality" structs:"speciality"`
+	AdmissionYear  *int    `json:"admissionYear" structs:"admissionYear"`
+	GraduationYear *int    `json:"graduationYear" structs:"graduationYear"`
 }

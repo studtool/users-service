@@ -7,12 +7,13 @@ import (
 )
 
 const (
-	Internal      = 0
-	BadFormat     = 1
-	InvalidFormat = 2
-	Conflict      = 3
-	NotFound      = 4
-	NotAuthorized = 5
+	Internal         = 0
+	BadFormat        = 1
+	InvalidFormat    = 2
+	Conflict         = 3
+	NotFound         = 4
+	NotAuthorized    = 5
+	PermissionDenied = 6
 )
 
 //easyjson:json
@@ -57,6 +58,10 @@ func NewNotFoundError(message string) *Error {
 
 func NewNotAuthorizedError(message string) *Error {
 	return NewError(NotAuthorized, message)
+}
+
+func NewPermissionDeniedError(message string) *Error {
+	return NewError(PermissionDenied, message)
 }
 
 func (v *Error) Error() string {
