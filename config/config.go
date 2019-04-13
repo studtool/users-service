@@ -9,6 +9,8 @@ import (
 var (
 	ServerPort = config.NewStringDefault("STUDTOOL_USERS_SERVICE_PORT", "80")
 
+	ShouldLogRequests = config.NewFlagDefault("STUDTOOL_USERS_SERVICE_SHOULD_LOG_REQUEST", true)
+
 	RepositoriesEnabled = config.NewFlagDefault("STUDTOOL_USERS_SERVICE_REPOSITORIES_ENABLED", false)
 	QueuesEnabled       = config.NewFlagDefault("STUDTOOL_USERS_SERVICE_QUEUES_ENABLED", false)
 
