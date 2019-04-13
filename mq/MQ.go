@@ -2,7 +2,6 @@ package mq
 
 import (
 	"fmt"
-	"github.com/studtool/users-service/repositories"
 
 	"github.com/streadway/amqp"
 
@@ -12,6 +11,7 @@ import (
 
 	"github.com/studtool/users-service/beans"
 	"github.com/studtool/users-service/config"
+	"github.com/studtool/users-service/repositories"
 )
 
 type MQ struct {
