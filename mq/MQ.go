@@ -2,6 +2,7 @@ package mq
 
 import (
 	"fmt"
+	"github.com/studtool/users-service/repositories"
 
 	"github.com/streadway/amqp"
 
@@ -14,19 +15,24 @@ import (
 )
 
 type MQ struct {
-	cq      amqp.Queue
-	dq      amqp.Queue
-	ch      *amqp.Channel
-	conn    *amqp.Connection
 	connStr string
+
+	ch   *amqp.Channel
+	conn *amqp.Connection
+
+	cq amqp.Queue
+	dq amqp.Queue
+
+	usersRepository repositories.UsersRepository
 }
 
-func NewQueue() *MQ {
+func NewQueue(uRepo repositories.UsersRepository) *MQ {
 	return &MQ{
 		connStr: fmt.Sprintf("amqp://%s:%s@%s:%s/",
 			config.UsersMqUser.Value(), config.UsersMqPassword.Value(),
 			config.UsersMqHost.Value(), config.UsersMqPort.Value(),
 		),
+		usersRepository: uRepo,
 	}
 }
 
@@ -120,6 +126,5 @@ func (mq *MQ) receive(q amqp.Queue, h MessageHandler) error {
 }
 
 func (mq *MQ) addUser(userId string) *errs.Error {
-	beans.Logger.Info("UserID" + userId)
-	return nil //TODO
+	return mq.usersRepository.AddUserById(userId) //TODO should retry if failed
 }
