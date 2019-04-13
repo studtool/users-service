@@ -27,8 +27,8 @@ github.com/stretchr/objx v0.1.1/go.mod h1:HFkY916IF+rwdDfMAkV7OtwuqBVzrE8GR6GFx+
 github.com/stretchr/testify v1.2.2/go.mod h1:a8OnRcib4nhh0OaRAV+Yts87kKdq0PP7pXfy6kDkUVs=
 github.com/stretchr/testify v1.3.0 h1:TivCn/peBQ7UY8ooIcPgZFpTNSz0Q2U6UrFlUfqbe0Q=
 github.com/stretchr/testify v1.3.0/go.mod h1:M5WIy9Dh21IEIfnGCwXGc5bZfKNJtfHm1UVUgZn+9EI=
-github.com/studtool/common v0.0.0-20190409122200-ea4763eecb35 h1:hbODBAa0KwFVRRf46wA7Zp14aT/E9gSFocsU4QOo2W0=
-github.com/studtool/common v0.0.0-20190409122200-ea4763eecb35/go.mod h1:bq24shZBDIjJFH2PvuLuQaaXWP2Osawgw44qxrXglpg=
+github.com/studtool/common v0.0.0-20190413191559-78a49aea1c70 h1:AITxhubMKCaweNpSx8QpdOQaK9jBLY+9Tg28PENEWXE=
+github.com/studtool/common v0.0.0-20190413191559-78a49aea1c70/go.mod h1:ZHurKIugwp6Y61TPmCbTjvl+OjKdSzrNbv/wLN0Nh0E=
 github.com/studtool/structs v1.1.0 h1:IKdnL9BdoHbsGZ26qGF7vCVc+Up3A6YoOIf6n0lrKJk=
 github.com/studtool/structs v1.1.0/go.mod h1:dWlcTQcB65mffBNuBDCtx6OK6/cIo8VHWbXqKChKeu0=
 github.com/tidwall/pretty v0.0.0-20190325153808-1166b9ac2b65 h1:rQ229MBgvW68s1/g6f1/63TgYwYxfF4E+bi/KC19P8g=
@@ -47,8 +47,6 @@ golang.org/x/sync v0.0.0-20190412183630-56d357773e84 h1:IqXQ59gzdXv58Jmm2xn0tSOR
 golang.org/x/sync v0.0.0-20190412183630-56d357773e84/go.mod h1:RxMgew5VJxzue5/jJTE5uejpjVlOe/izrB70Jof72aM=
 golang.org/x/sys v0.0.0-20180905080454-ebe1bf3edb33/go.mod h1:STP8DvDyc/dI5b8T5hshtkjS+E42TnysNCUPdjciGhY=
 golang.org/x/sys v0.0.0-20190403152447-81d4e9dc473e/go.mod h1:h1NjWce9XRLGQEsW7wpKNCjG9DtNlClVuFLEZdDNbEs=
-golang.org/x/sys v0.0.0-20190405154228-4b34438f7a67 h1:1Fzlr8kkDLQwqMP8GxrhptBLqZG/EDpiATneiZHY998=
-golang.org/x/sys v0.0.0-20190405154228-4b34438f7a67/go.mod h1:h1NjWce9XRLGQEsW7wpKNCjG9DtNlClVuFLEZdDNbEs=
 golang.org/x/sys v0.0.0-20190412213103-97732733099d h1:+R4KGOnez64A81RvjARKc4UT5/tI9ujCIVX+P5KiHuI=
 golang.org/x/sys v0.0.0-20190412213103-97732733099d/go.mod h1:h1NjWce9XRLGQEsW7wpKNCjG9DtNlClVuFLEZdDNbEs=
 golang.org/x/text v0.3.0 h1:g61tztE5qeGQ89tm6NTjjM9VPIm088od1l6aSorWRWg=

@@ -41,7 +41,7 @@ func NewServer(r repositories.UsersRepository) *Server {
 	})
 
 	srv.server.SetLogger(beans.Logger)
-	srv.server.SetHandler(srv.server.WithRecover(mx))
+	srv.server.SetHandler(srv.server.WithLogs(srv.server.WithRecover(mx)))
 
 	return srv
 }
