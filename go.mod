@@ -9,6 +9,7 @@ require (
 	github.com/gorilla/handlers v1.4.0
 	github.com/gorilla/mux v1.7.1
 	github.com/mailru/easyjson v0.0.0-20190403194419-1ea4449da983
+	github.com/streadway/amqp v0.0.0-20190404075320-75d898a42a94
 	github.com/studtool/common v0.0.0-20190409122200-ea4763eecb35
 	github.com/studtool/structs v1.1.0
 	github.com/tidwall/pretty v0.0.0-20190325153808-1166b9ac2b65 // indirect

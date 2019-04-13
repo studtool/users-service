@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/studtool/users-service/mq"
 	"os"
 	"os/signal"
 
@@ -22,7 +23,7 @@ func main() {
 			if err := conn.Open(); err != nil {
 				beans.Logger.Fatal(err.Error())
 			} else {
-				beans.Logger.Info("connection open")
+				beans.Logger.Info("storage: connection open")
 			}
 		}))
 		defer func() {
@@ -30,7 +31,7 @@ func main() {
 				if err := conn.Close(); err != nil {
 					beans.Logger.Fatal(err)
 				} else {
-					beans.Logger.Info("connection closed")
+					beans.Logger.Info("storage: connection closed")
 				}
 			}))
 		}()
@@ -47,11 +48,35 @@ func main() {
 		))
 	}
 
+	if config.QueuesEnabled.Value() {
+		panicOnErr(c.Provide(mq.NewQueue))
+		panicOnErr(c.Invoke(func(q *mq.MQ) {
+			if err := q.OpenConnection(); err != nil {
+				beans.Logger.Fatal(err)
+			} else {
+				beans.Logger.Info("queue: connection open")
+			}
+			if err := q.Run(); err != nil {
+				beans.Logger.Fatal(err)
+			} else {
+				beans.Logger.Info("queue: ready to receive messages")
+			}
+		}))
+		defer func() {
+			panicOnErr(c.Invoke(func(q *mq.MQ) {
+				if err := q.CloseConnection(); err != nil {
+					beans.Logger.Fatal(err)
+				} else {
+					beans.Logger.Info("queue: connection closed")
+				}
+			}))
+		}()
+	}
+
 	ch := make(chan os.Signal)
 	signal.Notify(ch, os.Interrupt)
 
 	panicOnErr(c.Provide(api.NewServer))
-
 	panicOnErr(c.Invoke(func(srv *api.Server) {
 		go func() {
 			if err := srv.Run(); err != nil {

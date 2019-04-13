@@ -15,6 +15,8 @@ github.com/mailru/easyjson/jwriter
 github.com/mailru/easyjson/buffer
 # github.com/sirupsen/logrus v1.4.1
 github.com/sirupsen/logrus
+# github.com/streadway/amqp v0.0.0-20190404075320-75d898a42a94
+github.com/streadway/amqp
 # github.com/studtool/common v0.0.0-20190409122200-ea4763eecb35
 github.com/studtool/common/consts
 github.com/studtool/common/errs
@@ -22,6 +24,7 @@ github.com/studtool/common/rest
 github.com/studtool/common/logs
 github.com/studtool/common/config
 github.com/studtool/common/types
+github.com/studtool/common/utils
 # github.com/studtool/structs v1.1.0
 github.com/studtool/structs
 # github.com/xdg/scram v0.0.0-20180814205039-7eeb5667e42c
