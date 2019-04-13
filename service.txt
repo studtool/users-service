@@ -1,1 +1,1 @@
-studtool/auth-service
+studtool/users-service
