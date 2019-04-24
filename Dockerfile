@@ -8,3 +8,4 @@ WORKDIR /tmp
 COPY --from=base /tmp/service ./service
 ENTRYPOINT ["./service"]
 EXPOSE 80
+
