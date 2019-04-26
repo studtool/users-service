@@ -17,7 +17,7 @@ github.com/mailru/easyjson/buffer
 github.com/sirupsen/logrus
 # github.com/streadway/amqp v0.0.0-20190404075320-75d898a42a94
 github.com/streadway/amqp
-# github.com/studtool/common v0.0.0-20190425112943-548f8a638aea
+# github.com/studtool/common v0.0.0-20190425154531-48e7c4e178d2
 github.com/studtool/common/consts
 github.com/studtool/common/errs
 github.com/studtool/common/rest
@@ -66,12 +66,12 @@ go.mongodb.org/mongo-driver/internal
 go.uber.org/dig
 go.uber.org/dig/internal/digreflect
 go.uber.org/dig/internal/dot
-# golang.org/x/crypto v0.0.0-20190424203555-c05e17bb3b2d
+# golang.org/x/crypto v0.0.0-20190426145343-a29dc8fdc734
 golang.org/x/crypto/pbkdf2
 # golang.org/x/sync v0.0.0-20190423024810-112230192c58
 golang.org/x/sync/semaphore
-# golang.org/x/sys v0.0.0-20190425045458-9f0b1ff7b46a
+# golang.org/x/sys v0.0.0-20190426135247-a129542de9ae
 golang.org/x/sys/unix
-# golang.org/x/text v0.3.1
+# golang.org/x/text v0.3.2
 golang.org/x/text/unicode/norm
 golang.org/x/text/transform
