@@ -1,15 +1,17 @@
 package main
 
 import (
-	"github.com/studtool/users-service/mq"
 	"os"
 	"os/signal"
 
 	"go.uber.org/dig"
 
+	"github.com/studtool/common/utils"
+
 	"github.com/studtool/users-service/api"
 	"github.com/studtool/users-service/beans"
 	"github.com/studtool/users-service/config"
+	"github.com/studtool/users-service/mq"
 	"github.com/studtool/users-service/repositories"
 	"github.com/studtool/users-service/repositories/mongo"
 )
@@ -18,8 +20,8 @@ func main() {
 	c := dig.New()
 
 	if config.RepositoriesEnabled.Value() {
-		panicOnErr(c.Provide(mongo.NewConnection))
-		panicOnErr(c.Invoke(func(conn *mongo.Connection) {
+		utils.AssertOk(c.Provide(mongo.NewConnection))
+		utils.AssertOk(c.Invoke(func(conn *mongo.Connection) {
 			if err := conn.Open(); err != nil {
 				beans.Logger.Fatal(err.Error())
 			} else {
@@ -27,7 +29,7 @@ func main() {
 			}
 		}))
 		defer func() {
-			panicOnErr(c.Invoke(func(conn *mongo.Connection) {
+			utils.AssertOk(c.Invoke(func(conn *mongo.Connection) {
 				if err := conn.Close(); err != nil {
 					beans.Logger.Fatal(err)
 				} else {
@@ -36,12 +38,12 @@ func main() {
 			}))
 		}()
 
-		panicOnErr(c.Provide(
+		utils.AssertOk(c.Provide(
 			mongo.NewUsersRepository,
 			dig.As(new(repositories.UsersRepository)),
 		))
 	} else {
-		panicOnErr(c.Provide(
+		utils.AssertOk(c.Provide(
 			func() repositories.UsersRepository {
 				return nil
 			},
@@ -49,8 +51,8 @@ func main() {
 	}
 
 	if config.QueuesEnabled.Value() {
-		panicOnErr(c.Provide(mq.NewQueue))
-		panicOnErr(c.Invoke(func(q *mq.MQ) {
+		utils.AssertOk(c.Provide(mq.NewQueue))
+		utils.AssertOk(c.Invoke(func(q *mq.MQ) {
 			if err := q.OpenConnection(); err != nil {
 				beans.Logger.Fatal(err)
 			} else {
@@ -63,7 +65,7 @@ func main() {
 			}
 		}))
 		defer func() {
-			panicOnErr(c.Invoke(func(q *mq.MQ) {
+			utils.AssertOk(c.Invoke(func(q *mq.MQ) {
 				if err := q.CloseConnection(); err != nil {
 					beans.Logger.Fatal(err)
 				} else {
@@ -74,10 +76,11 @@ func main() {
 	}
 
 	ch := make(chan os.Signal)
+	signal.Notify(ch, os.Kill)
 	signal.Notify(ch, os.Interrupt)
 
-	panicOnErr(c.Provide(api.NewServer))
-	panicOnErr(c.Invoke(func(srv *api.Server) {
+	utils.AssertOk(c.Provide(api.NewServer))
+	utils.AssertOk(c.Invoke(func(srv *api.Server) {
 		go func() {
 			if err := srv.Run(); err != nil {
 				beans.Logger.Fatal(err)
@@ -86,7 +89,7 @@ func main() {
 		}()
 	}))
 	defer func() {
-		panicOnErr(c.Invoke(func(srv *api.Server) {
+		utils.AssertOk(c.Invoke(func(srv *api.Server) {
 			if err := srv.Shutdown(); err != nil {
 				beans.Logger.Fatal(err)
 			}
@@ -94,10 +97,4 @@ func main() {
 	}()
 
 	<-ch
-}
-
-func panicOnErr(err error) {
-	if err != nil {
-		panic(err)
-	}
 }

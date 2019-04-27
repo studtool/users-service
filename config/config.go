@@ -4,9 +4,19 @@ import (
 	"time"
 
 	"github.com/studtool/common/config"
+
+	"github.com/studtool/users-service/beans"
 )
 
 var (
+	_ = func() *config.FlagVar {
+		f := config.NewFlagDefault("STUDTOOL_USERS_SERVICE_SHOULD_LOG_ENV_VARS", false)
+		if f.Value() {
+			config.SetLogger(beans.Logger)
+		}
+		return f
+	}()
+
 	ServerPort = config.NewStringDefault("STUDTOOL_USERS_SERVICE_PORT", "80")
 
 	ShouldLogRequests = config.NewFlagDefault("STUDTOOL_USERS_SERVICE_SHOULD_LOG_REQUEST", true)

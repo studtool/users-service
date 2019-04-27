@@ -9,8 +9,7 @@ import (
 )
 
 const (
-	userIdVar     = `user_id`
-	userIdPattern = `\w{8}-\w{4}-\w{4}-\w{4}-\w{12}`
+	userIdVar = `user_id`
 )
 
 func (srv *Server) parseUsername(r *http.Request) (string, *errs.Error) {

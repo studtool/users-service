@@ -35,7 +35,7 @@ func NewServer(r repositories.UsersRepository) *Server {
 	mx.Handle("/api/users", handlers.MethodHandler{
 		http.MethodGet: http.HandlerFunc(srv.findProfile),
 	})
-	mx.Handle(fmt.Sprintf("/api/users/{%s:%s}/profile", userIdVar, userIdPattern), handlers.MethodHandler{
+	mx.Handle(fmt.Sprintf("/api/users/{%s}/profile", userIdVar), handlers.MethodHandler{
 		http.MethodGet:   http.HandlerFunc(srv.getProfile),
 		http.MethodPatch: srv.server.WithAuth(http.HandlerFunc(srv.updateProfile)),
 	})
