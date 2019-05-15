@@ -183,7 +183,7 @@ func (c *QueueClient) deleteUser(body []byte) {
 		if err := c.usersRepository.DeleteUserById(data.UserID); err != nil {
 			c.handleRepoErr(err)
 		} else {
-			beans.Logger.Info(fmt.Sprintf("queue: %s -> %v", c.createdUsersQueue.Name, *data))
+			beans.Logger.Info(fmt.Sprintf("queue: %s -> %v", c.deletedUsersQueue.Name, *data))
 		}
 	}
 }
