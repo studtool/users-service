@@ -20,7 +20,7 @@ func (srv *Server) findProfile(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	srv.server.WriteBodyJSON(w, http.StatusOK, user)
+	srv.server.WriteOkJSON(w, user)
 }
 
 func (srv *Server) getProfile(w http.ResponseWriter, r *http.Request) {
@@ -32,7 +32,7 @@ func (srv *Server) getProfile(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	srv.server.WriteBodyJSON(w, http.StatusOK, m)
+	srv.server.WriteOkJSON(w, m)
 }
 
 func (srv *Server) updateProfile(w http.ResponseWriter, r *http.Request) {

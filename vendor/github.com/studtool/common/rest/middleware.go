@@ -5,6 +5,8 @@ import (
 	"net/http"
 	"strconv"
 	"strings"
+
+	"github.com/studtool/common/consts"
 )
 
 func (srv *Server) WithLogs(h http.Handler) http.Handler {
@@ -40,9 +42,9 @@ func (srv *Server) WithRecover(h http.Handler) http.Handler {
 func (srv *Server) WithAuth(h http.Handler) http.Handler {
 	return http.HandlerFunc(
 		func(w http.ResponseWriter, r *http.Request) {
-			userId := srv.ParseUserId(r)
-			if userId == "" {
-				w.WriteHeader(http.StatusUnauthorized)
+			if srv.ParseUserID(r) == consts.EmptyString {
+				srv.WriteUnauthorized(w)
+				return
 			}
 			h.ServeHTTP(w, r)
 		},

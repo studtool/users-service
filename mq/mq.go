@@ -28,7 +28,7 @@ type MQ struct {
 
 func NewQueue(uRepo repositories.UsersRepository) *MQ {
 	return &MQ{
-		connStr: fmt.Sprintf("amqp://%s:%s@%s:%s/",
+		connStr: fmt.Sprintf("amqp://%s:%s@%s:%d/",
 			config.UsersMqUser.Value(), config.UsersMqPassword.Value(),
 			config.UsersMqHost.Value(), config.UsersMqPort.Value(),
 		),

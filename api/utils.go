@@ -27,7 +27,7 @@ func (srv *Server) parseUserId(r *http.Request) string {
 }
 
 func (srv *Server) checkAuthPermission(r *http.Request) *errs.Error {
-	if srv.server.ParseUserId(r) == srv.parseUserId(r) {
+	if srv.server.ParseUserID(r) == srv.parseUserId(r) {
 		return nil
 	}
 	return errs.NewPermissionDeniedError("access denied") //TODO save err

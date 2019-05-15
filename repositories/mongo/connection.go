@@ -23,7 +23,7 @@ type Connection struct {
 
 func NewConnection() *Connection {
 	return &Connection{
-		uri: fmt.Sprintf("mongodb://%s:%s",
+		uri: fmt.Sprintf("mongodb://%s:%d",
 			config.StorageHost.Value(), config.StoragePort.Value(),
 		),
 	}

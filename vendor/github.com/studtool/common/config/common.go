@@ -1,4 +1,4 @@
-package config
+package cconfig
 
 import (
 	"fmt"
@@ -7,7 +7,8 @@ import (
 )
 
 var (
-	logger *logs.Logger = nil
+	//nolint:gochecknoglobals
+	logger *logs.Logger
 )
 
 func SetLogger(log *logs.Logger) {
