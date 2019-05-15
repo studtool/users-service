@@ -19,6 +19,6 @@ require (
 	go.uber.org/dig v1.7.1-0.20190327003609-4cc9f8898fe3
 	golang.org/x/crypto v0.0.0-20190513172903-22d7a77e9e5f // indirect
 	golang.org/x/sync v0.0.0-20190423024810-112230192c58 // indirect
-	golang.org/x/sys v0.0.0-20190515105350-f91f9b37d0e9 // indirect
+	golang.org/x/sys v0.0.0-20190515190549-87c872767d25 // indirect
 	golang.org/x/text v0.3.2 // indirect
 )
