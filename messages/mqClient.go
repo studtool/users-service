@@ -169,6 +169,8 @@ func (c *QueueClient) addUser(body []byte) {
 	} else {
 		if err := c.usersRepository.AddUserById(data.UserID); err != nil {
 			c.handleRepoErr(err)
+		} else {
+			beans.Logger.Info(fmt.Sprintf("queue: %s -> %v", c.createdUsersQueue.Name, *data))
 		}
 	}
 }
