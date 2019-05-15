@@ -24,6 +24,7 @@ github.com/studtool/common/errs
 github.com/studtool/common/rest
 github.com/studtool/common/logs
 github.com/studtool/common/config
+github.com/studtool/common/queues
 github.com/studtool/common/types
 # github.com/studtool/structs v1.1.0
 github.com/studtool/structs
