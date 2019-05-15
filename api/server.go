@@ -6,6 +6,7 @@ import (
 
 	"github.com/gorilla/handlers"
 	"github.com/gorilla/mux"
+	"go.uber.org/dig"
 
 	"github.com/studtool/common/consts"
 	"github.com/studtool/common/rest"
@@ -20,7 +21,13 @@ type Server struct {
 	usersRepository repositories.UsersRepository
 }
 
-func NewServer(r repositories.UsersRepository) *Server {
+type ServerParams struct {
+	dig.In
+
+	UsersRepository repositories.UsersRepository
+}
+
+func NewServer(params ServerParams) *Server {
 	srv := &Server{
 		server: rest.NewServer(
 			rest.ServerConfig{
@@ -28,7 +35,7 @@ func NewServer(r repositories.UsersRepository) *Server {
 				Port: config.ServerPort.Value(),
 			},
 		),
-		usersRepository: r,
+		usersRepository: params.UsersRepository,
 	}
 
 	mx := mux.NewRouter()

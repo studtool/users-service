@@ -2,14 +2,14 @@ package messages
 
 import (
 	"fmt"
+
 	"github.com/mailru/easyjson"
-	"github.com/studtool/common/errs"
-	"github.com/studtool/common/queues"
+	"github.com/streadway/amqp"
 	"go.uber.org/dig"
 
-	"github.com/streadway/amqp"
-
 	"github.com/studtool/common/consts"
+	"github.com/studtool/common/errs"
+	"github.com/studtool/common/queues"
 	"github.com/studtool/common/utils"
 
 	"github.com/studtool/users-service/beans"
