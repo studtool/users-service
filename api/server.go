@@ -1,7 +1,6 @@
 package api
 
 import (
-	"fmt"
 	"net/http"
 
 	"github.com/gorilla/handlers"
@@ -39,11 +38,13 @@ func NewServer(params ServerParams) *Server {
 	}
 
 	mx := mux.NewRouter()
-	mx.Handle("/api/users", handlers.MethodHandler{
+	mx.Handle("/api/public/users", handlers.MethodHandler{
 		http.MethodGet: http.HandlerFunc(srv.findProfile),
 	})
-	mx.Handle(fmt.Sprintf("/api/users/{%s}/profile", userIdVar), handlers.MethodHandler{
-		http.MethodGet:   http.HandlerFunc(srv.getProfile),
+	mx.Handle("/api/public/users/{user_id}/profile", handlers.MethodHandler{
+		http.MethodGet: http.HandlerFunc(srv.getProfile),
+	})
+	mx.Handle("/api/protected/users/{user_id}/profile", handlers.MethodHandler{
 		http.MethodPatch: srv.server.WithAuth(http.HandlerFunc(srv.updateProfile)),
 	})
 
