@@ -180,6 +180,8 @@ func (c *QueueClient) deleteUser(body []byte) {
 	} else {
 		if err := c.usersRepository.DeleteUserById(data.UserID); err != nil {
 			c.handleRepoErr(err)
+		} else {
+			beans.Logger.Info(fmt.Sprintf("queue: %s -> %s", c.createdUsersQueue.Name, data.UserID))
 		}
 	}
 }
