@@ -11,7 +11,7 @@ import (
 	"github.com/studtool/users-service/api"
 	"github.com/studtool/users-service/beans"
 	"github.com/studtool/users-service/config"
-	"github.com/studtool/users-service/mq"
+	"github.com/studtool/users-service/messages"
 	"github.com/studtool/users-service/repositories"
 	"github.com/studtool/users-service/repositories/mongo"
 )
@@ -51,8 +51,8 @@ func main() {
 	}
 
 	if config.QueuesEnabled.Value() {
-		utils.AssertOk(c.Provide(mq.NewQueue))
-		utils.AssertOk(c.Invoke(func(q *mq.MQ) {
+		utils.AssertOk(c.Provide(messages.NewQueueClient))
+		utils.AssertOk(c.Invoke(func(q *messages.QueueClient) {
 			if err := q.OpenConnection(); err != nil {
 				beans.Logger.Fatal(err)
 			} else {
@@ -65,7 +65,7 @@ func main() {
 			}
 		}))
 		defer func() {
-			utils.AssertOk(c.Invoke(func(q *mq.MQ) {
+			utils.AssertOk(c.Invoke(func(q *messages.QueueClient) {
 				if err := q.CloseConnection(); err != nil {
 					beans.Logger.Fatal(err)
 				} else {
