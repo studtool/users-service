@@ -28,14 +28,11 @@ var (
 	StoragePort = cconfig.NewIntDefault("STUDTOOL_USERS_STORAGE_PORT", 27017)
 	StorageDB   = cconfig.NewStringDefault("STUDTOOL_USERS_STORAGE_NAME", "users")
 
-	UsersMqHost     = cconfig.NewStringDefault("STUDTOOL_USERS_MQ_HOST", "127.0.0.1")
-	UsersMqPort     = cconfig.NewIntDefault("STUDTOOL_USERS_MQ_PORT", 5672)
-	UsersMqUser     = cconfig.NewStringDefault("STUDTOOL_USERS_MQ_USER", "user")
-	UsersMqPassword = cconfig.NewStringDefault("STUDTOOL_USERS_MQ_PASSWORD", "password")
+	MqHost     = cconfig.NewStringDefault("STUDTOOL_MQ_HOST", "127.0.0.1")
+	MqPort     = cconfig.NewIntDefault("STUDTOOL_MQ_PORT", 5672)
+	MqUser     = cconfig.NewStringDefault("STUDTOOL_MQ_USER", "user")
+	MqPassword = cconfig.NewStringDefault("STUDTOOL_MQ_PASSWORD", "password")
 
-	UsersMqConnNumRet = cconfig.NewIntDefault("STUDTOOL_USERS_MQ_CONNECTION_NUM_RETRIES", 10)
-	UsersMqConnRetItv = cconfig.NewTimeDefault("STUDTOOL_USERS_MQ_CONNECTION_RETRY_INTERVAL", 2*time.Second)
-
-	CreatedUsersQueueName = cconfig.NewStringDefault("STUDTOOL_CREATED_USERS_QUEUE_NAME", "created_users")
-	DeletedUsersQueueName = cconfig.NewStringDefault("STUDTOOL_DELETED_USERS_QUEUE_NAME", "deleted_users")
+	MqConnNumRet = cconfig.NewIntDefault("STUDTOOL_MQ_CONNECTION_NUM_RETRIES", 10)
+	MqConnRetItv = cconfig.NewTimeDefault("STUDTOOL_MQ_CONNECTION_RETRY_INTERVAL", 2*time.Second)
 )

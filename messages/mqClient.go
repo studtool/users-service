@@ -38,8 +38,8 @@ type ClientParams struct {
 func NewQueueClient(params ClientParams) *QueueClient {
 	return &QueueClient{
 		connStr: fmt.Sprintf("amqp://%s:%s@%s:%d/",
-			config.UsersMqUser.Value(), config.UsersMqPassword.Value(),
-			config.UsersMqHost.Value(), config.UsersMqPort.Value(),
+			config.MqUser.Value(), config.MqPassword.Value(),
+			config.MqHost.Value(), config.MqPort.Value(),
 		),
 		usersRepository: params.UsersRepository,
 	}
@@ -53,7 +53,7 @@ func (c *QueueClient) OpenConnection() error {
 		}
 		conn, err = amqp.Dial(c.connStr)
 		return err
-	}, config.UsersMqConnNumRet.Value(), config.UsersMqConnRetItv.Value())
+	}, config.MqConnNumRet.Value(), config.MqConnRetItv.Value())
 	if err != nil {
 		return err
 	}
