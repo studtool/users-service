@@ -3,12 +3,9 @@ package messages
 import (
 	"fmt"
 
-	"github.com/mailru/easyjson"
 	"github.com/streadway/amqp"
 	"go.uber.org/dig"
 
-	"github.com/studtool/common/consts"
-	"github.com/studtool/common/errs"
 	"github.com/studtool/common/queues"
 	"github.com/studtool/common/utils"
 
@@ -17,26 +14,26 @@ import (
 	"github.com/studtool/users-service/repositories"
 )
 
-type QueueClient struct {
+type MqClient struct {
 	connStr    string
 	connection *amqp.Connection
 
 	channel *amqp.Channel
 
-	createdUsersQueue amqp.Queue
-	deletedUsersQueue amqp.Queue
+	profilesToCreateQueue amqp.Queue
+	profilesToDeleteQueue amqp.Queue
 
 	usersRepository repositories.UsersRepository
 }
 
-type ClientParams struct {
+type MqClientParams struct {
 	dig.In
 
 	repositories.UsersRepository
 }
 
-func NewQueueClient(params ClientParams) *QueueClient {
-	return &QueueClient{
+func NewMqClient(params MqClientParams) *MqClient {
+	return &MqClient{
 		connStr: fmt.Sprintf("amqp://%s:%s@%s:%d/",
 			config.MqUser.Value(), config.MqPassword.Value(),
 			config.MqHost.Value(), config.MqPort.Value(),
@@ -45,7 +42,7 @@ func NewQueueClient(params ClientParams) *QueueClient {
 	}
 }
 
-func (c *QueueClient) OpenConnection() error {
+func (c *MqClient) OpenConnection() error {
 	var conn *amqp.Connection
 	err := utils.WithRetry(func(n int) (err error) {
 		if n > 0 {
@@ -58,42 +55,29 @@ func (c *QueueClient) OpenConnection() error {
 		return err
 	}
 
-	ch, err := conn.Channel()
-	if err != nil {
-		return err
-	}
-
-	c.createdUsersQueue, err = ch.QueueDeclare(
-		queues.CreatedUsersQueueName,
-		false,
-		false,
-		false,
-		false,
-		nil,
-	)
-	if err != nil {
-		return err
-	}
-
-	c.deletedUsersQueue, err = ch.QueueDeclare(
-		queues.DeletedUsersQueueName,
-		false,
-		false,
-		false,
-		false,
-		nil,
-	)
-	if err != nil {
-		return err
-	}
-
-	c.channel = ch
 	c.connection = conn
+
+	c.channel, err = conn.Channel()
+	if err != nil {
+		return err
+	}
+
+	c.profilesToCreateQueue, err =
+		c.declareQueue(queues.ProfilesToCreateQueueName)
+	if err != nil {
+		return err
+	}
+
+	c.profilesToDeleteQueue, err =
+		c.declareQueue(queues.ProfilesToDeleteQueueName)
+	if err != nil {
+		return err
+	}
 
 	return nil
 }
 
-func (c *QueueClient) CloseConnection() error {
+func (c *MqClient) CloseConnection() error {
 	if err := c.channel.Close(); err != nil {
 		return err
 	}
@@ -102,100 +86,22 @@ func (c *QueueClient) CloseConnection() error {
 
 type MessageHandler func(data []byte)
 
-func (c *QueueClient) Run() error {
-	if err := c.recvCreatedUsersData(); err != nil {
-		return err
-	}
-	if err := c.recvDeletedUsersData(); err != nil {
-		return err
-	}
-	return nil
-}
-
-func (c *QueueClient) recvCreatedUsersData() error {
-	messages, err := c.channel.Consume(
-		c.createdUsersQueue.Name,
-		consts.EmptyString,
-		true,
-		false,
-		false,
-		false,
-		nil,
+func (c *MqClient) Run() error {
+	err := c.runConsumer(
+		queues.CreatedUsersQueueName,
+		c.createProfile,
 	)
 	if err != nil {
 		return err
 	}
 
-	go func() {
-		for d := range messages {
-			c.addUser(d.Body)
-		}
-	}()
-
-	return nil
-}
-
-func (c *QueueClient) recvDeletedUsersData() error {
-	messages, err := c.channel.Consume(
-		c.deletedUsersQueue.Name,
-		consts.EmptyString,
-		true,
-		false,
-		false,
-		false,
-		nil,
+	err = c.runConsumer(
+		queues.DeletedUsersQueueName,
+		c.deleteProfile,
 	)
 	if err != nil {
 		return err
 	}
 
-	go func() {
-		for d := range messages {
-			c.deleteUser(d.Body)
-		}
-	}()
-
 	return nil
-}
-
-func (c *QueueClient) parseMessageBody(data []byte, v easyjson.Unmarshaler) error {
-	return easyjson.Unmarshal(data, v)
-}
-
-func (c *QueueClient) addUser(body []byte) {
-	data := &queues.CreatedUserData{}
-	if err := c.parseMessageBody(body, data); err != nil {
-		c.handleErr(err)
-	} else {
-		if err := c.usersRepository.AddUserById(data.UserID); err != nil {
-			c.handleRepoErr(err)
-		} else {
-			beans.Logger.Info(fmt.Sprintf("queue: %s -> %v", c.createdUsersQueue.Name, *data))
-		}
-	}
-}
-
-func (c *QueueClient) deleteUser(body []byte) {
-	data := &queues.DeletedUserData{}
-	if err := c.parseMessageBody(body, data); err != nil {
-		c.handleErr(err)
-	} else {
-		if err := c.usersRepository.DeleteUserById(data.UserID); err != nil {
-			c.handleRepoErr(err)
-		} else {
-			beans.Logger.Info(fmt.Sprintf("queue: %s -> %v", c.deletedUsersQueue.Name, *data))
-		}
-	}
-}
-
-func (c *QueueClient) handleErr(err error) {
-	if err != nil {
-		beans.Logger.Error(err)
-	}
-}
-
-func (c *QueueClient) handleRepoErr(err *errs.Error) {
-	if err != nil {
-		beans.Logger.Error(err)
-	}
 }

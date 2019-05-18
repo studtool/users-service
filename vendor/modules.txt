@@ -4,7 +4,7 @@ github.com/go-stack/stack
 github.com/golang/snappy
 # github.com/gorilla/handlers v1.4.0
 github.com/gorilla/handlers
-# github.com/gorilla/mux v1.7.1
+# github.com/gorilla/mux v1.7.2
 github.com/gorilla/mux
 # github.com/konsorten/go-windows-terminal-sequences v1.0.2
 github.com/konsorten/go-windows-terminal-sequences
@@ -13,11 +13,11 @@ github.com/mailru/easyjson
 github.com/mailru/easyjson/jlexer
 github.com/mailru/easyjson/jwriter
 github.com/mailru/easyjson/buffer
-# github.com/sirupsen/logrus v1.4.1
+# github.com/sirupsen/logrus v1.4.2
 github.com/sirupsen/logrus
 # github.com/streadway/amqp v0.0.0-20190404075320-75d898a42a94
 github.com/streadway/amqp
-# github.com/studtool/common v0.0.0-20190515103956-841b404fd5a7
+# github.com/studtool/common v0.0.0-20190518195043-e1b27f5c60c5
 github.com/studtool/common/utils
 github.com/studtool/common/consts
 github.com/studtool/common/errs
@@ -32,7 +32,7 @@ github.com/studtool/structs
 github.com/xdg/scram
 # github.com/xdg/stringprep v1.0.0
 github.com/xdg/stringprep
-# go.mongodb.org/mongo-driver v1.0.1
+# go.mongodb.org/mongo-driver v1.0.2
 go.mongodb.org/mongo-driver/bson
 go.mongodb.org/mongo-driver/mongo
 go.mongodb.org/mongo-driver/mongo/options
@@ -71,7 +71,7 @@ go.uber.org/dig/internal/dot
 golang.org/x/crypto/pbkdf2
 # golang.org/x/sync v0.0.0-20190423024810-112230192c58
 golang.org/x/sync/semaphore
-# golang.org/x/sys v0.0.0-20190515190549-87c872767d25
+# golang.org/x/sys v0.0.0-20190516110030-61b9204099cb
 golang.org/x/sys/unix
 # golang.org/x/text v0.3.2
 golang.org/x/text/unicode/norm
