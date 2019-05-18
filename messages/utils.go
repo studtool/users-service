@@ -61,7 +61,7 @@ func (c *MqClient) writeMessageConsumedLog(
 	queueName string,
 	data easyjson.Marshaler,
 ) {
-	beans.Logger.Info(
+	beans.Logger().Info(
 		fmt.Sprintf("message consumed (%s): %v", queueName, data),
 	)
 }
@@ -70,19 +70,19 @@ func (c *MqClient) writeMessageConsumptionErrorLog(
 	queueName string,
 	data easyjson.Marshaler,
 ) {
-	beans.Logger.Error(
+	beans.Logger().Error(
 		fmt.Sprintf("message not consumed (%s): %v", queueName, data),
 	)
 }
 
 func (c *MqClient) writeErrorLog(err error) {
 	if err != nil {
-		beans.Logger.Error(err)
+		beans.Logger().Error(err)
 	}
 }
 
 func (c *MqClient) writeRepositoryErrorLog(err *errs.Error) {
 	if err != nil {
-		beans.Logger.Error(err)
+		beans.Logger().Error(err)
 	}
 }

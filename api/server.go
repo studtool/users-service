@@ -48,7 +48,7 @@ func NewServer(params ServerParams) *Server {
 		http.MethodPatch: srv.server.WithAuth(http.HandlerFunc(srv.updateProfile)),
 	})
 
-	srv.server.SetLogger(beans.Logger)
+	srv.server.SetLogger(beans.Logger())
 
 	h := srv.server.WithRecover(mx)
 	if config.ShouldLogRequests.Value() {

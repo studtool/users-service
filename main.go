@@ -23,17 +23,17 @@ func main() {
 		utils.AssertOk(c.Provide(mongo.NewConnection))
 		utils.AssertOk(c.Invoke(func(conn *mongo.Connection) {
 			if err := conn.Open(); err != nil {
-				beans.Logger.Fatal(err.Error())
+				beans.Logger().Fatal(err.Error())
 			} else {
-				beans.Logger.Info("storage: connection open")
+				beans.Logger().Info("storage: connection open")
 			}
 		}))
 		defer func() {
 			utils.AssertOk(c.Invoke(func(conn *mongo.Connection) {
 				if err := conn.Close(); err != nil {
-					beans.Logger.Fatal(err)
+					beans.Logger().Fatal(err)
 				} else {
-					beans.Logger.Info("storage: connection closed")
+					beans.Logger().Info("storage: connection closed")
 				}
 			}))
 		}()
@@ -54,22 +54,22 @@ func main() {
 		utils.AssertOk(c.Provide(messages.NewMqClient))
 		utils.AssertOk(c.Invoke(func(q *messages.MqClient) {
 			if err := q.OpenConnection(); err != nil {
-				beans.Logger.Fatal(err)
+				beans.Logger().Fatal(err)
 			} else {
-				beans.Logger.Info("queue: connection open")
+				beans.Logger().Info("queue: connection open")
 			}
 			if err := q.Run(); err != nil {
-				beans.Logger.Fatal(err)
+				beans.Logger().Fatal(err)
 			} else {
-				beans.Logger.Info("queue: ready to receive messages")
+				beans.Logger().Info("queue: ready to receive messages")
 			}
 		}))
 		defer func() {
 			utils.AssertOk(c.Invoke(func(q *messages.MqClient) {
 				if err := q.CloseConnection(); err != nil {
-					beans.Logger.Fatal(err)
+					beans.Logger().Fatal(err)
 				} else {
-					beans.Logger.Info("queue: connection closed")
+					beans.Logger().Info("queue: connection closed")
 				}
 			}))
 		}()
@@ -83,7 +83,7 @@ func main() {
 	utils.AssertOk(c.Invoke(func(srv *api.Server) {
 		go func() {
 			if err := srv.Run(); err != nil {
-				beans.Logger.Fatal(err)
+				beans.Logger().Fatal(err)
 				ch <- os.Interrupt
 			}
 		}()
@@ -91,7 +91,7 @@ func main() {
 	defer func() {
 		utils.AssertOk(c.Invoke(func(srv *api.Server) {
 			if err := srv.Shutdown(); err != nil {
-				beans.Logger.Fatal(err)
+				beans.Logger().Fatal(err)
 			}
 		}))
 	}()
