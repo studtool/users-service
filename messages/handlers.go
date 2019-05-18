@@ -22,7 +22,7 @@ func (c *MqClient) createProfile(body []byte) {
 }
 
 func (c *MqClient) deleteProfile(body []byte) {
-	data := &queues.DeletedUserData{}
+	data := &queues.ProfileToDeleteData{}
 	if err := c.unmarshalMessageBody(body, data); err != nil {
 		c.writeErrorLog(err)
 	} else {

@@ -88,7 +88,7 @@ type MessageHandler func(data []byte)
 
 func (c *MqClient) Run() error {
 	err := c.runConsumer(
-		queues.CreatedUsersQueueName,
+		queues.ProfilesToCreateQueueName,
 		c.createProfile,
 	)
 	if err != nil {
@@ -96,7 +96,7 @@ func (c *MqClient) Run() error {
 	}
 
 	err = c.runConsumer(
-		queues.DeletedUsersQueueName,
+		queues.ProfilesToDeleteQueueName,
 		c.deleteProfile,
 	)
 	if err != nil {
