@@ -1,4 +1,6 @@
-module github.com/studtool/users-service // v0.0.1
+module github.com/studtool/users-service
+
+// v0.0.1
 
 go 1.12
 
