@@ -4,35 +4,46 @@ import (
 	"time"
 
 	"github.com/studtool/common/config"
-
-	"github.com/studtool/users-service/beans"
+	"github.com/studtool/common/logs"
 )
 
 var (
-	_ = func() *cconfig.FlagVar {
-		f := cconfig.NewFlagDefault("STUDTOOL_USERS_SERVICE_SHOULD_LOG_ENV_VARS", false)
+	// TODO compile-time injection
+	// nolint:golint,gochecknoglobals
+	ComponentName = "users-service"
+
+	// TODO compile-time injection
+	// nolint:golint,gochecknoglobals
+	ComponentVersion = "v0.0.1"
+
+	_ = func() *config.FlagVar {
+		f := config.NewFlagDefault("STUDTOOL_USERS_SERVICE_SHOULD_LOG_ENV_VARS", false)
 		if f.Value() {
-			cconfig.SetLogger(beans.Logger())
+			config.SetLogger(logs.NewRawLogger())
 		}
 		return f
 	}()
 
-	ServerPort = cconfig.NewStringDefault("STUDTOOL_USERS_SERVICE_PORT", "80")
+	ServerPort = config.NewIntDefault("STUDTOOL_USERS_SERVICE_PORT", 80)
 
-	ShouldLogRequests = cconfig.NewFlagDefault("STUDTOOL_USERS_SERVICE_SHOULD_LOG_REQUEST", true)
+	// nolint:golint,gochecknoglobals
+	CorsAllowed = config.NewFlagDefault("STUDTOOL_USERS_SERVICE_SHOULD_ALLOW_CORS", false)
 
-	RepositoriesEnabled = cconfig.NewFlagDefault("STUDTOOL_USERS_SERVICE_REPOSITORIES_ENABLED", false)
-	QueuesEnabled       = cconfig.NewFlagDefault("STUDTOOL_USERS_SERVICE_QUEUES_ENABLED", false)
+	// nolint:golint,gochecknoglobals
+	RequestsLogsEnabled = config.NewFlagDefault("STUDTOOL_USERS_SERVICE_SHOULD_LOG_REQUESTS", true)
 
-	StorageHost = cconfig.NewStringDefault("STUDTOOL_USERS_STORAGE_HOST", "127.0.0.1")
-	StoragePort = cconfig.NewIntDefault("STUDTOOL_USERS_STORAGE_PORT", 27017)
-	StorageDB   = cconfig.NewStringDefault("STUDTOOL_USERS_STORAGE_NAME", "users")
+	RepositoriesEnabled = config.NewFlagDefault("STUDTOOL_USERS_SERVICE_REPOSITORIES_ENABLED", false)
+	QueuesEnabled       = config.NewFlagDefault("STUDTOOL_USERS_SERVICE_QUEUES_ENABLED", false)
 
-	MqHost     = cconfig.NewStringDefault("STUDTOOL_MQ_HOST", "127.0.0.1")
-	MqPort     = cconfig.NewIntDefault("STUDTOOL_MQ_PORT", 5672)
-	MqUser     = cconfig.NewStringDefault("STUDTOOL_MQ_USER", "user")
-	MqPassword = cconfig.NewStringDefault("STUDTOOL_MQ_PASSWORD", "password")
+	StorageHost = config.NewStringDefault("STUDTOOL_USERS_STORAGE_HOST", "127.0.0.1")
+	StoragePort = config.NewIntDefault("STUDTOOL_USERS_STORAGE_PORT", 27017)
+	StorageDB   = config.NewStringDefault("STUDTOOL_USERS_STORAGE_NAME", "users")
 
-	MqConnNumRet = cconfig.NewIntDefault("STUDTOOL_MQ_CONNECTION_NUM_RETRIES", 10)
-	MqConnRetItv = cconfig.NewTimeDefault("STUDTOOL_MQ_CONNECTION_RETRY_INTERVAL", 2*time.Second)
+	MqHost     = config.NewStringDefault("STUDTOOL_MQ_HOST", "127.0.0.1")
+	MqPort     = config.NewIntDefault("STUDTOOL_MQ_PORT", 5672)
+	MqUser     = config.NewStringDefault("STUDTOOL_MQ_USER", "user")
+	MqPassword = config.NewStringDefault("STUDTOOL_MQ_PASSWORD", "password")
+
+	MqConnNumRet = config.NewIntDefault("STUDTOOL_MQ_CONNECTION_NUM_RETRIES", 10)
+	MqConnRetItv = config.NewTimeDefault("STUDTOOL_MQ_CONNECTION_RETRY_INTERVAL", 2*time.Second)
 )

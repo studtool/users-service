@@ -3,13 +3,14 @@ package main
 import (
 	"os"
 	"os/signal"
+	"syscall"
 
 	"go.uber.org/dig"
 
-	"github.com/studtool/common/utils"
+	"github.com/studtool/common/logs"
+	"github.com/studtool/common/utils/assertions"
 
 	"github.com/studtool/users-service/api"
-	"github.com/studtool/users-service/beans"
 	"github.com/studtool/users-service/config"
 	"github.com/studtool/users-service/messages"
 	"github.com/studtool/users-service/repositories"
@@ -18,32 +19,33 @@ import (
 
 func main() {
 	c := dig.New()
+	logger := logs.NewRawLogger()
 
 	if config.RepositoriesEnabled.Value() {
-		utils.AssertOk(c.Provide(mongo.NewConnection))
-		utils.AssertOk(c.Invoke(func(conn *mongo.Connection) {
+		assertions.AssertOk(c.Provide(mongo.NewConnection))
+		assertions.AssertOk(c.Invoke(func(conn *mongo.Connection) {
 			if err := conn.Open(); err != nil {
-				beans.Logger().Fatal(err.Error())
+				logger.Fatal(err.Error())
 			} else {
-				beans.Logger().Info("storage: connection open")
+				logger.Info("storage: connection open")
 			}
 		}))
 		defer func() {
-			utils.AssertOk(c.Invoke(func(conn *mongo.Connection) {
+			assertions.AssertOk(c.Invoke(func(conn *mongo.Connection) {
 				if err := conn.Close(); err != nil {
-					beans.Logger().Fatal(err)
+					logger.Fatal(err)
 				} else {
-					beans.Logger().Info("storage: connection closed")
+					logger.Info("storage: connection closed")
 				}
 			}))
 		}()
 
-		utils.AssertOk(c.Provide(
+		assertions.AssertOk(c.Provide(
 			mongo.NewUsersRepository,
 			dig.As(new(repositories.UsersRepository)),
 		))
 	} else {
-		utils.AssertOk(c.Provide(
+		assertions.AssertOk(c.Provide(
 			func() repositories.UsersRepository {
 				return nil
 			},
@@ -51,47 +53,47 @@ func main() {
 	}
 
 	if config.QueuesEnabled.Value() {
-		utils.AssertOk(c.Provide(messages.NewMqClient))
-		utils.AssertOk(c.Invoke(func(q *messages.MqClient) {
+		assertions.AssertOk(c.Provide(messages.NewMqClient))
+		assertions.AssertOk(c.Invoke(func(q *messages.MqClient) {
 			if err := q.OpenConnection(); err != nil {
-				beans.Logger().Fatal(err)
+				logger.Fatal(err)
 			} else {
-				beans.Logger().Info("queue: connection open")
+				logger.Info("queue: connection open")
 			}
 			if err := q.Run(); err != nil {
-				beans.Logger().Fatal(err)
+				logger.Fatal(err)
 			} else {
-				beans.Logger().Info("queue: ready to receive messages")
+				logger.Info("queue: ready to receive messages")
 			}
 		}))
 		defer func() {
-			utils.AssertOk(c.Invoke(func(q *messages.MqClient) {
+			assertions.AssertOk(c.Invoke(func(q *messages.MqClient) {
 				if err := q.CloseConnection(); err != nil {
-					beans.Logger().Fatal(err)
+					logger.Fatal(err)
 				} else {
-					beans.Logger().Info("queue: connection closed")
+					logger.Info("queue: connection closed")
 				}
 			}))
 		}()
 	}
 
-	ch := make(chan os.Signal)
-	signal.Notify(ch, os.Kill)
-	signal.Notify(ch, os.Interrupt)
+	ch := make(chan os.Signal, 1)
+	signal.Notify(ch, syscall.SIGINT)
+	signal.Notify(ch, syscall.SIGTERM)
 
-	utils.AssertOk(c.Provide(api.NewServer))
-	utils.AssertOk(c.Invoke(func(srv *api.Server) {
+	assertions.AssertOk(c.Provide(api.NewServer))
+	assertions.AssertOk(c.Invoke(func(srv *api.Server) {
 		go func() {
 			if err := srv.Run(); err != nil {
-				beans.Logger().Fatal(err)
+				logger.Fatal(err)
 				ch <- os.Interrupt
 			}
 		}()
 	}))
 	defer func() {
-		utils.AssertOk(c.Invoke(func(srv *api.Server) {
+		assertions.AssertOk(c.Invoke(func(srv *api.Server) {
 			if err := srv.Shutdown(); err != nil {
-				beans.Logger().Fatal(err)
+				logger.Fatal(err)
 			}
 		}))
 	}()

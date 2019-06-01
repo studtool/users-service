@@ -3,15 +3,17 @@ package messages
 import (
 	"fmt"
 
-	"github.com/streadway/amqp"
 	"go.uber.org/dig"
 
+	"github.com/streadway/amqp"
+
+	"github.com/studtool/common/logs"
 	"github.com/studtool/common/queues"
 	"github.com/studtool/common/utils"
 
-	"github.com/studtool/users-service/beans"
 	"github.com/studtool/users-service/config"
 	"github.com/studtool/users-service/repositories"
+	"github.com/studtool/users-service/utils"
 )
 
 type MqClient struct {
@@ -24,6 +26,9 @@ type MqClient struct {
 	profilesToDeleteQueue amqp.Queue
 
 	usersRepository repositories.UsersRepository
+
+	structLogger  logs.Logger
+	reflectLogger logs.Logger
 }
 
 type MqClientParams struct {
@@ -33,20 +38,25 @@ type MqClientParams struct {
 }
 
 func NewMqClient(params MqClientParams) *MqClient {
-	return &MqClient{
+	c := &MqClient{
 		connStr: fmt.Sprintf("amqp://%s:%s@%s:%d/",
 			config.MqUser.Value(), config.MqPassword.Value(),
 			config.MqHost.Value(), config.MqPort.Value(),
 		),
 		usersRepository: params.UsersRepository,
 	}
+
+	c.structLogger = srvutils.MakeStructLogger(c)
+	c.reflectLogger = srvutils.MakeReflectLogger(c)
+
+	return c
 }
 
 func (c *MqClient) OpenConnection() error {
 	var conn *amqp.Connection
 	err := utils.WithRetry(func(n int) (err error) {
 		if n > 0 {
-			beans.Logger().Info(fmt.Sprintf("opening message queue connection. retry #%d", n))
+			c.structLogger.Infof("opening message queue connection. retry #%d", n)
 		}
 		conn, err = amqp.Dial(c.connStr)
 		return err

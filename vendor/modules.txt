@@ -1,11 +1,15 @@
 # github.com/beorn7/perks v1.0.0
 github.com/beorn7/perks/quantile
+# github.com/go-http-utils/headers v0.0.0-20181008091004-fed159eddc2a
+github.com/go-http-utils/headers
 # github.com/go-stack/stack v1.8.0
 github.com/go-stack/stack
 # github.com/golang/protobuf v1.3.1
 github.com/golang/protobuf/proto
 # github.com/golang/snappy v0.0.1
 github.com/golang/snappy
+# github.com/google/uuid v1.1.1
+github.com/google/uuid
 # github.com/gorilla/handlers v1.4.0
 github.com/gorilla/handlers
 # github.com/gorilla/mux v1.7.2
@@ -19,6 +23,8 @@ github.com/mailru/easyjson/jwriter
 github.com/mailru/easyjson/buffer
 # github.com/matttproud/golang_protobuf_extensions v1.0.1
 github.com/matttproud/golang_protobuf_extensions/pbutil
+# github.com/philhofer/fwd v1.0.0
+github.com/philhofer/fwd
 # github.com/prometheus/client_golang v0.9.3
 github.com/prometheus/client_golang/prometheus/promhttp
 github.com/prometheus/client_golang/prometheus
@@ -36,17 +42,22 @@ github.com/prometheus/procfs/internal/fs
 github.com/sirupsen/logrus
 # github.com/streadway/amqp v0.0.0-20190404075320-75d898a42a94
 github.com/streadway/amqp
-# github.com/studtool/common v0.0.0-20190521162703-c4226b5e6d6e
-github.com/studtool/common/utils
+# github.com/studtool/common v0.0.0-20190601155918-f251751aed3c
+github.com/studtool/common/logs
+github.com/studtool/common/utils/assertions
 github.com/studtool/common/consts
 github.com/studtool/common/errs
 github.com/studtool/common/rest
-github.com/studtool/common/logs
 github.com/studtool/common/config
 github.com/studtool/common/queues
+github.com/studtool/common/utils
 github.com/studtool/common/types
+github.com/studtool/common/rft
+github.com/studtool/common/utils/process
 # github.com/studtool/structs v1.1.0
 github.com/studtool/structs
+# github.com/tinylib/msgp v1.1.0
+github.com/tinylib/msgp/msgp
 # github.com/xdg/scram v0.0.0-20180814205039-7eeb5667e42c
 github.com/xdg/scram
 # github.com/xdg/stringprep v1.0.0

@@ -7,9 +7,6 @@ import (
 	"github.com/streadway/amqp"
 
 	"github.com/studtool/common/consts"
-	"github.com/studtool/common/errs"
-
-	"github.com/studtool/users-service/beans"
 )
 
 func (c *MqClient) declareQueue(queueName string) (amqp.Queue, error) {
@@ -58,31 +55,17 @@ func (c *MqClient) unmarshalMessageBody(data []byte, v easyjson.Unmarshaler) err
 }
 
 func (c *MqClient) writeMessageConsumedLog(
-	queueName string,
-	data easyjson.Marshaler,
+	queueName string, data easyjson.Marshaler,
 ) {
-	beans.Logger().Info(
-		fmt.Sprintf("message consumed (%s): %v", queueName, data),
+	c.structLogger.Infof(
+		"message consumed (%s): %v", queueName, data,
 	)
 }
 
 func (c *MqClient) writeMessageConsumptionErrorLog(
-	queueName string,
-	data easyjson.Marshaler,
+	queueName string, data easyjson.Marshaler,
 ) {
-	beans.Logger().Error(
+	c.structLogger.Errorf(
 		fmt.Sprintf("message not consumed (%s): %v", queueName, data),
 	)
-}
-
-func (c *MqClient) writeErrorLog(err error) {
-	if err != nil {
-		beans.Logger().Error(err)
-	}
-}
-
-func (c *MqClient) writeRepositoryErrorLog(err *errs.Error) {
-	if err != nil {
-		beans.Logger().Error(err)
-	}
 }
