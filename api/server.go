@@ -38,14 +38,18 @@ func NewServer(params ServerParams) *Server {
 		usersRepository: params.UsersRepository,
 	}
 
+	v := rest.ParseAPIVersion(config.ComponentVersion)
+	srvPublicPath := rest.MakeAPIPath(v, rest.APITypePublic, "/users")
+	srvProtectedPath := rest.MakeAPIPath(v, rest.APITypeProtected, "/users")
+
 	mx := mux.NewRouter()
-	mx.Handle("/api/public/users", handlers.MethodHandler{
+	mx.Handle(srvPublicPath, handlers.MethodHandler{
 		http.MethodGet: http.HandlerFunc(srv.findProfile),
 	})
-	mx.Handle("/api/public/users/{user_id}/profile", handlers.MethodHandler{
+	mx.Handle(srvPublicPath+"/{user_id}/profile", handlers.MethodHandler{
 		http.MethodGet: http.HandlerFunc(srv.getProfile),
 	})
-	mx.Handle("/api/protected/users/{user_id}/profile", handlers.MethodHandler{
+	mx.Handle(srvProtectedPath+"/{user_id}/profile", handlers.MethodHandler{
 		http.MethodPatch: srv.WithAuth(http.HandlerFunc(srv.updateProfile)),
 	})
 	mx.Handle(`/pprof`, rest.GetProfilerHandler())
