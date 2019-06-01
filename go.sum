@@ -73,8 +73,8 @@ github.com/stretchr/objx v0.1.1/go.mod h1:HFkY916IF+rwdDfMAkV7OtwuqBVzrE8GR6GFx+
 github.com/stretchr/testify v1.2.2/go.mod h1:a8OnRcib4nhh0OaRAV+Yts87kKdq0PP7pXfy6kDkUVs=
 github.com/stretchr/testify v1.3.0 h1:TivCn/peBQ7UY8ooIcPgZFpTNSz0Q2U6UrFlUfqbe0Q=
 github.com/stretchr/testify v1.3.0/go.mod h1:M5WIy9Dh21IEIfnGCwXGc5bZfKNJtfHm1UVUgZn+9EI=
-github.com/studtool/common v0.0.0-20190601173132-c3aa2a788c05 h1:nJd8y99rtC9NEL8mFw9HIDKPZpmHgs9LRVexDqcbr6o=
-github.com/studtool/common v0.0.0-20190601173132-c3aa2a788c05/go.mod h1:GN7YAPsIBJmqLUfUOVFGIum02UMHTgs2WWOqlctQQjA=
+github.com/studtool/common v0.0.0-20190601174939-15a2e267924c h1:ViytwHABlILIzeTeqS4KZGPTxbNPoC5yFCyg3lu5c94=
+github.com/studtool/common v0.0.0-20190601174939-15a2e267924c/go.mod h1:GN7YAPsIBJmqLUfUOVFGIum02UMHTgs2WWOqlctQQjA=
 github.com/studtool/structs v1.1.0 h1:IKdnL9BdoHbsGZ26qGF7vCVc+Up3A6YoOIf6n0lrKJk=
 github.com/studtool/structs v1.1.0/go.mod h1:dWlcTQcB65mffBNuBDCtx6OK6/cIo8VHWbXqKChKeu0=
 github.com/tidwall/pretty v0.0.0-20190325153808-1166b9ac2b65 h1:rQ229MBgvW68s1/g6f1/63TgYwYxfF4E+bi/KC19P8g=
